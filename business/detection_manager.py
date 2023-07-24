@@ -1,4 +1,4 @@
-from app.business.YOLOv7.track import run_detection
+from app.business.YOLOv7.track import TrackClass
 
 class DetectionManager:
     def __init__(self, video_path):
@@ -6,13 +6,14 @@ class DetectionManager:
         self.detections = []
         self.centroids = []
         self.speeds = []
+        self.track_instance = TrackClass()
 
-    def detect_people(self):
-        run_detection(source=self.video_path, 
+    """def detect_people(self):
+        self.track_instance.run_detection(source=self.video_path, 
                       yolo_weights='app/business/YOLOv7/yolov7.pt', 
                       classes=0,
                       conf_thres=0.4,
-                      iou_thres=0.5,)
+                      iou_thres=0.5,)"""
                       
 
     def calculate_centroids(self):

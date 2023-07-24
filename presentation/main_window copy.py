@@ -60,21 +60,19 @@ class MainWindow(QWidget):
         logo_pixmap = QPixmap("logo-ucn.png").scaled(71, 71)
         logo_label.setPixmap(logo_pixmap)
         logo_label.setAlignment(Qt.AlignCenter)
-        self.grid.addWidget(logo_label, 0, 0, 1, 1, alignment=Qt.AlignHCenter)  # Centrar el logo en el grid
 
         # Agregar texto al lado del logo
         texto_label = QLabel("Sistema de detección peatonal")
         texto_label.setStyleSheet("font-size: 18px; text-align: center;")
-        self.grid.addWidget(texto_label, 1, 0, 1, 1, alignment=Qt.AlignHCenter)  # Centrar el texto debajo del logo
- 
+
         # Crear un QHBoxLayout y agregar el logo y el texto
         logo_layout = QHBoxLayout()
-        logo_layout.addWidget(logo_label)  # Centrar el logo y el texto
-        logo_layout.addWidget(texto_label, alignment=Qt.AlignHCenter)
+        logo_layout.addWidget(logo_label)
+        logo_layout.addWidget(texto_label)
         logo_layout.setAlignment(Qt.AlignCenter)
 
         # Agregar el QHBoxLayout al grid layout
-        self.grid.addLayout(logo_layout, 0, 0, 1, 1, alignment=Qt.AlignHCenter)
+        self.grid.addLayout(logo_layout, 0, 0, 1, 1)
 
         # Crear hbox para contener botones y opciones de filtrado
         self.hbox_buttons = QHBoxLayout()
@@ -83,14 +81,12 @@ class MainWindow(QWidget):
         self.importar_btn.clicked.connect(self.importar_video)
         self.importar_btn.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)  # Aplica la política de tamaño al botón
         self.hbox_buttons.addWidget(self.importar_btn)
-        self.grid.addWidget(self.importar_btn, 2, 0, 1, 1)
 
         self.detectar_btn = QPushButton("Detectar Personas")
         self.detectar_btn.clicked.connect(self.detectar_personas)
         self.detectar_btn.setEnabled(False)
         self.detectar_btn.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)  # Aplica la política de tamaño al botón
         self.hbox_buttons.addWidget(self.detectar_btn)
-        self.grid.addWidget(self.detectar_btn, 3, 0, 1, 1)
 
         # Agregar un botón para guardar el frame actual como imagen
         self.guardar_btn = QPushButton("Guardar frame actual")
@@ -128,7 +124,7 @@ class MainWindow(QWidget):
         self.video_label.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)  # Aplica la política de tamaño a video_label
 
         # Añadir video_label al abarcar las primeras 10 filas de la segunda columna
-        self.grid.addWidget(self.video_label, 0, 1, 5, 1)
+        self.grid.addWidget(self.video_label, 0, 1, 6, 1)
 
         self.progressBar = QProgressBar()
         self.progressBar.setRange(0, 100)  # Rango del progreso de 0 a 100
@@ -156,7 +152,7 @@ class MainWindow(QWidget):
         self.grid.addLayout(pausa_progress_layout, 6, 1)
 
         # Añadir un espacio vacío en la parte inferior de la segunda columna
-        self.grid.addWidget(QLabel(), 6, 0, 1, 2)
+        self.grid.addWidget(QLabel(), 7, 2)
 
         # Crear la tabla para mostrar los datos de detección
         self.table = QTableWidget()
@@ -170,10 +166,10 @@ class MainWindow(QWidget):
 
         # Configurar el estiramiento de la cuadrícula
         for i in range(9):
-            self.grid.setRowStretch(i, 0)  # Hacer que cada fila use igual cantidad de altura
+            self.grid.setRowStretch(i, 1)  # Hacer que cada fila use igual cantidad de altura
 
         self.grid.setColumnStretch(0, 1)  # Hacer que la columna izquierda use la mitad de la anchura actual
-        self.grid.setColumnStretch(1, 3)  # Hacer que la columna derecha use el doble de la anchura actual
+        self.grid.setColumnStretch(1, 2)  # Hacer que la columna derecha use el doble de la anchura actual
 
         self.setLayout(self.grid)
 
@@ -307,13 +303,9 @@ class MainWindow(QWidget):
         hbox.addWidget(self.centroide_checkbox)
         hbox.addWidget(self.bounding_boxes_checkbox)
 
-        self.grid.addWidget(self.velocidad_checkbox, 4, 0, 1, 1)
-        self.grid.addWidget(self.centroide_checkbox, 4, 1, 1, 1)
-        self.grid.addWidget(self.bounding_boxes_checkbox, 4, 2, 1, 1)
-
         self.signal_manager.button_signal.connect(self.tracker.handle_checkboxes_updated)
 
-        #self.vbox_left.addLayout(hbox)
+        self.vbox_left.addLayout(hbox)
 
         self.detection_thread = DetectionThread(self.tracker,
                                                 self.video_path,
